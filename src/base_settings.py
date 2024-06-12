@@ -1,35 +1,27 @@
+from pydantic_settings import BaseSettings
 from typing import Optional
 
-from pydantic import BaseModel
-from pydantic_settings import (
-    BaseSettings,
-    SettingsConfigDict,
-)
 
-
-class PostgresSettings(BaseModel):
+class PostgresSettings(BaseSettings):
     user: str = 'user'
     password: str = 'password'
     db: str = 'fastapi_shop'
     host: str = 'db'
-    port: str = 5432
-    url: str = 'postgresql+asyncpg://user:password@host.docker.internal:5432/fastapi_shop'
+    port: int = 5432
+    url: str = 'postgresql+asyncpg://user:password@db:5432/fastapi_shop'
+    api_key: Optional[str] = None
 
 
 class ProjectSettings(BaseSettings):
-    api_key: str
+    api_key: Optional[str] = None
     debug: Optional[bool] = True
     api_logger_format: Optional[str] = '%(levelname)s: %(asctime)s - %(message)s'
 
     postgres: PostgresSettings = PostgresSettings()
 
-    model_config = SettingsConfigDict(
-        env_nested_delimiter='__',
-        frozen=True,
-        env_file='.env',
-        env_file_encoding='utf-8',
-        extra='ignore',
-    )
+    class Config:
+        env_file = '.env'
+        env_file_encoding = 'utf-8'
 
 
 base_settings = ProjectSettings()
