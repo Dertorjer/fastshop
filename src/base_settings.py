@@ -12,12 +12,13 @@ class PostgresSettings(BaseModel):
     password: str = 'password'
     db: str = 'fastapi_shop'
     host: str = 'db'
-    port: str = 5432
+    port: int = 5432
     url: str = 'postgresql+asyncpg://user:password@db:5432/fastapi_shop'
+    api_key: str = "test_api_key"
 
 
 class ProjectSettings(BaseSettings):
-    api_key: str
+    api_key: str = "test_api_key"
     debug: Optional[bool] = True
     api_logger_format: Optional[str] = '%(levelname)s: %(asctime)s - %(message)s'
 
